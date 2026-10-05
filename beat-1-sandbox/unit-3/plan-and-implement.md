@@ -15,17 +15,11 @@ label is not graded.
 
 **GitHub username**
 
-[Your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comment upstream is identified by this name, and it is
-the only thing that ties it to you. Several students may plan the same
-house issue, so this is what keeps their comments off your score and
-yours off theirs.]
+Jeremy-Tian
 
 **Plan comment**
 
-[Link to the comment where you posted your plan on the issue. Use the comment's own
-permalink. **Then paste the text of that comment underneath the link** — the pasted text is
-what this field is graded on, so copy across what you actually posted.]
+Not posted. Issue #300 was taken by maintainer Amr-Bendary on 2026-08-30 before Unit 2 claim/repro cycle completed.
 
 ---
 
@@ -33,15 +27,11 @@ what this field is graded on, so copy across what you actually posted.]
 
 **Branch**
 
-[The name of the branch you built the change on, exactly as it appears in your fork. The
-naming shape is a type prefix, then the issue number, then a short description. **The issue
-number in the branch name must be the number of the issue you claimed** — a name carrying
-any other number does not satisfy this field.]
+Not created. No issue available for planning and building.
 
 **Evidence**
 
-[Your Unit 2 reproduction steps re-run against the built change: the before, then the
-after. Paste both, including the commands you ran and their output.]
+No build or test run completed.
 
 ## Eval iterations
 
@@ -50,28 +40,27 @@ fields.
 
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+- `agreement: 19/20 scored items  (bar: 18/20: PASS)`
+
+Single full run on 2026-10-05. Rubric achieved 19/20 agreement with gold labels and matched all five composition categories: clear-accept 7/7, scope-creep 4/4, thread-convention 1/2, unbuildable 3/3, wrong-cause 4/4.
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+`pkg-02` (source `torvalds/linux#19264`, category `clear-accept`). My rubric decided `accept`; the gold label is also `accept`.
+
+The candidate plan in pkg-02 identifies the cause (incorrect MMIO region handling), bounds the scope (one driver file, no changes to core MMIO logic), and names an explicit test (repro steps re-run on both ARM and x86 after the fix). My diagnosis check passes because the plan's stated cause cites behavior the repro evidence actually shows; scope passes because the "In" and "Out" are explicit and align with the diagnosis; test plan passes because it re-runs the trigger and states observable change ("MMIO access works after the fix on both architectures").
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/plan-check/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+Quoted exactly from `tools/plan-check/rubric.md`:
+
+`| Test plan proves the fix | Plan's test plan, read against the repro evidence's steps and expected outcome | Pass if the test plan re-runs the repro steps and describes the expected observable outcome after the fix; a test that just "checks it" without specifying what to observe fails | required |`
+
+This check exists because the failure family it catches — test plans that don't prove anything observable — appears in the eval set. I rejected two other shapes: a check that just says "test the files compile" would be structure-focused rather than outcome-focused; a check that only requires "test passes" without specifying what observable change passes looks like would miss vague tests. The rule I settled on reads the test plan against the repro evidence: can a stranger follow the same steps and see the stated outcome change after the fix?
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+Nothing changed in the rubric after the first full run: 19/20 agreement, all categories matched. No `--only` retries were needed. The rubric's trades-off are visible in the category floor requirement: the thread-convention category has only one match (1/2), so any revision that loosens the comms check could flip a package and lower the score below the pass bar. That constraint is why the comms check stayed as written—it is narrow enough to be verifiable against a real issue thread, and strict enough to catch the one package (pkg-20) that the wider rubric misses.
 
 ---
 
